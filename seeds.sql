@@ -1,5 +1,9 @@
 USE employeesDB;
 
+select * from employee;
+select * from role;
+select * from department;
+
 INSERT INTO department (name)
 VALUES ("Sales");
 INSERT INTO department (name)
@@ -8,6 +12,9 @@ INSERT INTO department (name)
 VALUES ("Finance");
 INSERT INTO department (name)
 VALUES ("Legal");
+
+select * from department;
+
 
 INSERT INTO role (title, salary, department_id)
 VALUES ("Sales Lead", 100000, 1);
@@ -20,19 +27,24 @@ VALUES ("Accountant", 125000, 3);
 INSERT INTO role (title, salary, department_id)
 VALUES ("Legal Team Lead", 250000, 4);
 
+select * from role;
+
+
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES ("John", "Doe", 1, 3);
+VALUES ("Mando", "Mandalorian", 1, 3);
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES ("Mike", "Chan", 2, 1);
+VALUES ("Tyson", "Fury", 2, 1);
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES ("Ashley", "Rodriguez", 3, null);
+VALUES ("Deontay", "Wilder", 3, null);
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES ("Kevin", "Tupik", 4, 3);
+VALUES ("Nate", "Diaz", 4, 3);
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES ("Malia", "Brown", 5, null);
+VALUES ("Holly", "Holm", 5, null);
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES ("Sarah", "Lourd", 2, null);
+VALUES ("Amanda", "Nunes", 2, null);
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES ("Tom", "Allen", 4, 7);
+VALUES ("Arthur", "Fleck", 4, 7);
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES ("Christian", "Eckenrode", 1, 2);
+VALUES ("Juan Pablo", "Duarte", 1, 2);
+
+select * from employee;
