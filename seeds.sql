@@ -1,4 +1,4 @@
-USE employeesDB;
+USE employees_db;
 
 select * from employee;
 select * from role;

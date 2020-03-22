@@ -1,113 +1,154 @@
 var inquirer = require("inquirer");
 var connection = require('./connection');
 
-const viewOptions = [
-    "View Departments",
-    "View Roles",
-    "View Employees",
-    "Update Employee",
-    "exit"
-];
+askQuestions();
 
-const employeeOptions = [
-    "Zach De la Rocha",
-    "Barack Obama",
-    "Mando Mandalorian",
-    "Rick James",
-    "Arthur Fleck",
-    "Zoe Saldana",
-    "Tyson Fury",
-    "exit"
-];
+function askQuestions() {
+    inquirer.prompt({
+        message: "what would you like to do?",
+        type: "list",
+        choices: [
+            "view all employees",
+            "view all departments",
+            "add employee",
+            "add department",
+            "add role",
+            "update employee role",
+            "QUIT"
+        ],
+        name: "choice"
+    }).then(answers => {
+        console.log(answers.choice);
+        switch (answers.choice) {
+            case "view all employees":
+                viewEmployees()
+                break;
 
-const updateOptions = [
-    "First Name",
-    "Last Name",
-    "Role",
-    "exit"
-];
+            case "view all departments":
+                viewDepartments()
+                break;
 
-runSearch();
+            case "add employee":
+                addEmployee()
+                break;
 
+            case "add department":
+                addDepartment()
+                break;
 
-function runSearch() {
-    inquirer
-        .prompt({
-            name: "action",
-            type: "list",
-            message: "What would you like to do?",
-            choices: viewOptions
+            case "add role":
+                addRole()
+                break;
+
+            case "update employee role":
+                updateEmployeeRole();
+                break;
+
+            default:
+                connection.end()
+                break;
+        }
+    })
+}
+
+function viewEmployees() {
+    connection.query("SELECT * FROM employee", function (err, data) {
+        console.table(data);
+        askQuestions();
+    })
+}
+
+function viewDepartments() {
+    connection.query("SELECT * FROM department", function (err, data) {
+        console.table(data);
+        askQuestions();
+    })
+}
+
+function addEmployee() {
+    inquirer.prompt([{
+            type: "input",
+            name: "firstName",
+            message: "What is the employees first name?"
+        },
+        {
+            type: "input",
+            name: "lastName",
+            message: "What is the employees last name?"
+        },
+        {
+            type: "number",
+            name: "roleId",
+            message: "What is the employees role ID"
+        },
+        {
+            type: "number",
+            name: "managerId",
+            message: "What is the employees manager's ID?"
+        }
+    ]).then(function(res) {
+        connection.query('INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)', [res.firstName, res.lastName, res.roleId, res.managerId], function(err, data) {
+            if (err) throw err;
+            console.table("Successfully Inserted");
+            askQuestions();
         })
-        .then(function (answer) {
-            switch (answer.action) {
-                case viewOptions[0]:
-                    departmentView();
-                    break;
+    })
+}
 
-                case viewOptions[1]:
-                    roleView();
-                    break;
-
-                case viewOptions[2]:
-                    employeeView();
-                    break;
-
-                case viewOptions[3]:
-                    updateEmployee();
-
-                case updateOptions[4]:
-                    connection.end();
-                    break
-            }
+function addDepartment() {
+    inquirer.prompt([{
+        type: "input",
+        name: "department",
+        message: "What is the department that you want to add?"
+    }, ]).then(function(res) {
+        connection.query('INSERT INTO department (name) VALUES (?)', [res.department], function(err, data) {
+            if (err) throw err;
+            console.table("Successfully Inserted");
+            askQuestions();
         })
-}
-
-
-
-function departmentView() {
-    var sqlStr = "SELECT * FROM department";
-    connection.query(sqlStr, function (err, result) {
-        if (err) throw err;
-
-        console.table(result)
-        runSearch();
     })
 }
 
-function employeeView() {
-    var sqlStr = "SELECT first_name, last_name, title, salary FROM employee ";
-    sqlStr += "LEFT JOIN role ";
-    sqlStr += "ON employee.role_id = role.id"
-    connection.query(sqlStr, function (err, result) {
-        if (err) throw err;
-
-        console.table(result)
-        runSearch();
+function addRole() {
+    inquirer.prompt([
+        {
+            message: "enter title:",
+            type: "input",
+            name: "title"
+        }, {
+            message: "enter salary:",
+            type: "number",
+            name: "salary"
+        }, {
+            message: "enter department ID:",
+            type: "number",
+            name: "department_id"
+        }
+    ]).then(function (response) {
+        connection.query("INSERT INTO roles (title, salary, department_id) values (?, ?, ?)", [response.title, response.salary, response.department_id], function (err, data) {
+            console.table(data);
+        })
+        askQuestions();
     })
+
 }
 
-function roleView() {
-    var sqlStr = "SELECT * FROM role";
-    connection.query(sqlStr, function (err, result) {
-        if (err) throw err;
-
-        console.table(result)
-        runSearch();
+function updateEmployeeRole() {
+    inquirer.prompt([
+        {
+            message: "which employee would you like to update? (use first name only for now)",
+            type: "input",
+            name: "name"
+        }, {
+            message: "enter the new role ID:",
+            type: "number",
+            name: "role_id"
+        }
+    ]).then(function (response) {
+        connection.query("UPDATE employee SET role_id = ? WHERE first_name = ?", [response.role_id, response.name], function (err, data) {
+            console.table(data);
+        })
+        askQuestions();
     })
-}
 
-
-const updateEmployee = () => {
-
-    function runUpdateSearch() {
-        inquirer
-            .prompt({
-                name: "action",
-                type: "list",
-                message: "Which employee do you want to update?",
-                choices: employeeOptions
-            })
-           
-    }
-    runUpdateSearch();  
 }
