@@ -1,17 +1,18 @@
 # Employee Tracker
 
-A CLI CMS app that allows you to view and interact with information stored in a database. The app allows you to add, vew, and update departments, roles, employees. 
+A command line, content management system app that allows you to view and interact with information stored in a database. The app allows you to add, vew, and update departments, roles, employees ideal for employee tracking. 
 
 To start:
+    Fill in MySQL database credentials in connection.js
     node app.js
+    refresh database to view
 
 Created with: 
     Node.js
     Inquirer.js
-    MySQL
+    MySQL WorkBench
     console.table
 
-![Database Schema](Assets/schema.png)
-![Employee Tracker](Assets/employee-tracker.gif)
+![Employee Tracker](Assets/employee_tracker.gif)
 
 
