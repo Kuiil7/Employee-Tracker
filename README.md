@@ -16,4 +16,4 @@ A command line, content management system app that allows you to view and intera
     MySQL WorkBench
     console.table
 
-![Employee Tracker](Assets/employee_tracker.gif)
+
